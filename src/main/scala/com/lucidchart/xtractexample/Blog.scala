@@ -1,6 +1,6 @@
 package com.lucidchart.xtractexample
 
-import com.lucidchart.open.xtract._
+import com.lucidchart.open.xtract.{XmlReader, __}
 import com.lucidchart.open.xtract.XmlReader._
 
 import play.api.libs.functional.syntax._
