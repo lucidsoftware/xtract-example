@@ -25,7 +25,7 @@ object Blog {
     (__ \ "head" \ "title").read[String] and
       (__ \ "head"\ "subtitle").read[String].optional and
       (__ \ "head" \ "author").read[AuthorInfo] and
-      attribute("type")(enum(BlogType)).orElse(pure(BlogType.tech)) and
+      attribute("type")(enum(BlogType)).default(BlogType.tech) and
       (__ \ "body").read[Content]
   )(apply _)
 }
