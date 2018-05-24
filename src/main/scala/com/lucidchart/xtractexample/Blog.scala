@@ -3,7 +3,7 @@ package com.lucidchart.xtractexample
 import com.lucidchart.open.xtract.{XmlReader, __}
 import com.lucidchart.open.xtract.XmlReader._
 
-import play.api.libs.functional.syntax._
+import cats.syntax.all._
 
 object BlogType extends Enumeration {
   val tech = Value("technical")
@@ -22,12 +22,12 @@ case class Blog(
 
 object Blog {
   implicit val reader: XmlReader[Blog] = (
-    (__ \ "head" \ "title").read[String] and
-      (__ \ "head"\ "subtitle").read[String].optional and
-      (__ \ "head" \ "author").read[AuthorInfo] and
-      attribute("type")(enum(BlogType)).default(BlogType.tech) and
-      (__ \ "body").read[Content]
-  )(apply _)
+    (__ \ "head" \ "title").read[String],
+    (__ \ "head"\ "subtitle").read[String].optional,
+    (__ \ "head" \ "author").read[AuthorInfo],
+    attribute("type")(enum(BlogType)).default(BlogType.tech),
+    (__ \ "body").read[Content]
+  ).mapN(apply _)
 }
 
 case class AuthorInfo(
@@ -49,11 +49,11 @@ object AuthorInfo {
     }
   }
   implicit val reader: XmlReader[AuthorInfo] = (
-    nameReader and
-      attribute[String]("email").filter(validateEmail _).optional and
-      attribute("department")(enum(Departments)) and
-      attribute[Boolean]("canContact")
-  )(apply _)
+    nameReader,
+    attribute[String]("email").filter(validateEmail _).optional,
+    attribute("department")(enum(Departments)),
+    attribute[Boolean]("canContact")
+  ).mapN(apply _)
 }
 
 case class Content(sections: Seq[Section])
@@ -66,7 +66,7 @@ case class Section(title: Option[String], paragraphs: Seq[String])
 
 object Section {
   implicit val reader: XmlReader[Section] = (
-    attribute[String]("title").optional and
+    attribute[String]("title").optional,
     (__ \ "p").read(seq[String])
-  )(apply _)
+  ).mapN(apply _)
 }
