@@ -52,7 +52,7 @@ object AuthorInfo {
     nameReader,
     attribute[String]("email").filter(validateEmail _).optional,
     attribute("department")(enum(Departments)),
-    attribute[Boolean]("canContact"),
+    attribute[Boolean]("canContact")
   ).mapN(apply _)
 }
 
