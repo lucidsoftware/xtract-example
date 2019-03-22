@@ -23,7 +23,7 @@ case class Blog(
 object Blog {
   implicit val reader: XmlReader[Blog] = (
     (__ \ "head" \ "title").read[String],
-    (__ \ "head"\ "subtitle").read[String].optional,
+    (__ \ "head" \ "subtitle").read[String].optional,
     (__ \ "head" \ "author").read[AuthorInfo],
     attribute("type")(enum(BlogType)).default(BlogType.tech),
     (__ \ "body").read[Content]
